@@ -1,0 +1,21 @@
+{
+  "name": "burger",
+  "version": "1.0.0",
+  "description": "A simple node/express/mysql app to create burgers and eat them,",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CaptainJimmy/burger.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CaptainJimmy/burger/issues"
+  },
+  "homepage": "https://github.com/CaptainJimmy/burger#readme"
+}

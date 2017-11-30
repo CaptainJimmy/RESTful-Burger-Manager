@@ -1,0 +1,85 @@
+<style>
+body {
+	background-color: orangered;
+}
+h1,h2,h3,h4,p {
+	font-color: white;
+}
+</style>
+<div class="container">
+<div class="jumbotron"><h1>Welcome to Burgers Not Boogers.</h1></div>
+<div class="row">
+	<div class="col-xs-4" id="left">
+		<div class="panel">
+			<h3>Uneaten Burgers</h3>
+		<table class="table table-bordered table-hover table-responsive">
+			<thead>
+			<tr><th>ID</th><th>Burger Name</th><th>Who Submitted?</th><th>When?</th><th>Eat it!</th></tr>
+			</thead>
+			<tbody>
+		{{#each notEaten}}
+			<tr><td>{{id}}</td><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{date_created}}</td><td><a href="#" class="eatIt" data-value="{{id}}"><i class="fa fa-heart" aria-hidden="true" data-value="{{id}}"></i></a></td></tr> 
+		{{/each}}
+		</tbody>
+		</table>
+	</div>
+	</div>
+	<div class="col-xs-4" id="center">
+		<form method="POST" role="form" action="/">
+			<label for="username">What is your name?</label>
+			<input type="text" id="username" default="Bob" name="user_created" class="form-control">
+			<label for="add-burger">Add A Burger</label>
+			<input type="text" id="add-burger" name="burger_name" class="form-control">
+			<button class="btn btn-lg" id="add-burger-button" type="submit">Submit</button>
+		</form>
+	</div>
+	<div class="col-xs-4" id="right">
+		<div class="panel">
+			<h3>Eaten Burgers</h3>
+			<table class="table table-bordered table-hover table-responsive">
+			<thead>
+			<tr><th>Burger Name</th><th>Who Submitted?</th><th>When?</th></tr>
+			</thead>
+			<tbody>
+			{{#each isEaten}}
+			<tr><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{date_created}}</td><td>{{date_eaten}}</td></tr> 
+	     	 	{{/each}}
+			</tbody>
+		</table>
+	</div>
+<script>
+$(document).ready(function(){
+
+// $("#add-burger-button").on("click", function(event) {
+  //    event.preventDefault();
+//	var timeStamp=moment().format();
+  //    var newBurger = {
+    //    burger_name: $("#add-burger").val().trim(),
+//	user_created: $("#username").val().trim(),
+//	date_created: timeStamp
+  //    };
+//
+  //    $.post("/", newBurger)
+    //  .done(function(data) {
+      //  console.log(data);
+//        alert("Adding Burger...");
+  //    });
+ //   });	
+$(".eatIt").on("click",function(event) {
+	event.preventDefault();
+	var eatTheBurgerID = $(this).data('value');
+	console.log(eatTheBurgerID);
+	if (eatTheBurgerID) {
+ 	var path='/eatburger/' + eatTheBurgerID;
+//	$.post(path).done((data) => {
+ 	
+	$.post(path).done((data) => {
+	alert("Ate that burger!");
+	$(document).html(data);
+	});
+}
+});
+});
+</script>
+</div>
+</div>

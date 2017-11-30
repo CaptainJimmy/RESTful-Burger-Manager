@@ -1,85 +1,139 @@
 <style>
-body {
-	background-color: orangered;
-}
-h1,h2,h3,h4,p {
-	font-color: white;
-}
+	body {
+		background-color: orangered;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	p {
+		font-color: white;
+	}
 </style>
 <div class="container">
-<div class="jumbotron"><h1>Welcome to Burgers Not Boogers.</h1></div>
-<div class="row">
-	<div class="col-xs-4" id="left">
-		<div class="panel">
-			<h3>Uneaten Burgers</h3>
-		<table class="table table-bordered table-hover table-responsive">
-			<thead>
-			<tr><th>ID</th><th>Burger Name</th><th>Who Submitted?</th><th>When?</th><th>Eat it!</th></tr>
-			</thead>
-			<tbody>
-		{{#each notEaten}}
-			<tr><td>{{id}}</td><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{created_at}}</td><td><a href="#" class="eatIt" data-value="{{id}}"><i class="fa fa-heart" aria-hidden="true" data-value="{{id}}"></i></a></td></tr> 
-		{{/each}}
-		</tbody>
-		</table>
+	<div class="jumbotron">
+		<h1>Welcome to Burgers Not Boogers.</h1>
 	</div>
-	</div>
-	<div class="col-xs-4" id="center">
-		<form method="POST" role="form" action="/">
-			<label for="username">What is your name?</label>
-			<input type="text" id="username" default="Bob" name="user_created" class="form-control">
-			<label for="add-burger">Add A Burger</label>
-			<input type="text" id="add-burger" name="burger_name" class="form-control">
-			<button class="btn btn-lg" id="add-burger-button" type="submit">Submit</button>
-		</form>
-	</div>
-	<div class="col-xs-4" id="right">
-		<div class="panel">
-			<h3>Eaten Burgers</h3>
-			<table class="table table-bordered table-hover table-responsive">
-			<thead>
-			<tr><th>ID</th><th>Burger Name</th><th>Who Submitted?</th><th>When Was It Made?</th><th>When Was it Eaten?</th></tr>
-			</thead>
-			<tbody>
-			{{#each isEaten}}
-			<tr><td>{{id}}</td><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{created_at}}</td><td>{{updated_at}}</td></tr> 
-	     	 	{{/each}}
-			</tbody>
-		</table>
-	</div>
-<script>
-$(document).ready(function(){
+	<div class="row">
+		<div class="col-xs-4" id="left">
+			<div class="panel">
+				<h3>Uneaten Burgers</h3>
+				<table class="table table-bordered table-hover table-responsive">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Burger Name</th>
+							<th>Who Submitted?</th>
+							<th>When?</th>
+							<th>Eat it!</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each notEaten}}
+						<form>
+							<tr>
+								<td>{{id}}</td>
+								<td>{{burger_name}}</td>
+								<td>{{user_created}}</td>
+								<td>{{created_at}}</td>
+								<td>
+									<input type="hidden" name="id" value="{{id}}" data-value="{{id}}">
+									<button class="btn btn-default eatIt" data-value="{{id}}" type="submit">
+										<i class="fa fa-heart" aria-hidden="true" data-value="{{id}}"></i>
+									</button>
+								</td>
+							</tr>
+						</form>
+						{{/each}}
 
-// $("#add-burger-button").on("click", function(event) {
-  //    event.preventDefault();
-//	var timeStamp=moment().format();
-  //    var newBurger = {
-    //    burger_name: $("#add-burger").val().trim(),
-//	user_created: $("#username").val().trim(),
-//	date_created: timeStamp
-  //    };
-//
-  //    $.post("/", newBurger)
-    //  .done(function(data) {
-      //  console.log(data);
-//        alert("Adding Burger...");
-  //    });
- //   });	
-$(".eatIt").on("click",function(event) {
-	event.preventDefault();
-	var eatTheBurgerID = $(this).data('value');
-	console.log(eatTheBurgerID);
-	if (eatTheBurgerID) {
- 	var path='/eatburger/' + eatTheBurgerID;
-//	$.post(path).done((data) => {
- 	
-	$.post(path).done((data) => {
-	alert("Ate that burger!");
-	$(document).html(data);
-	});
-}
-});
-});
-</script>
-</div>
-</div>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-xs-4" id="center">
+			<form method="POST" role="form" action="/">
+				<label for="username">What is your name?</label>
+				<input type="text" id="username" default="Bob" name="user_created" class="form-control">
+				<label for="add-burger">Add A Burger</label>
+				<input type="text" id="add-burger" name="burger_name" class="form-control">
+				<button class="btn btn-lg" id="add-burger-button" type="submit">Submit</button>
+			</form>
+		</div>
+		<div class="col-xs-4" id="right">
+			<div class="panel">
+				<h3>Eaten Burgers</h3>
+				<table id="eaten-burgers" class="table table-bordered table-hover table-responsive">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Burger Name</th>
+							<th>Who Submitted?</th>
+							<th>When Was It Made?</th>
+							<th>When Was it Eaten?</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each isEaten}}
+						<tr>
+							<td>{{id}}</td>
+							<td>{{burger_name}}</td>
+							<td>{{user_created}}</td>
+							<td>{{created_at}}</td>
+							<td>{{updated_at}}</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+			<script>
+				$(document).ready(function () {
+
+					$(".eatIt").on("click", function (event) {
+						event.preventDefault();
+						var eatTheBurgerID = $(this).data('value');
+						console.log(eatTheBurgerID);
+						if (eatTheBurgerID) {
+							var path = '/eatburger/' + eatTheBurgerID;
+							$.ajax({
+								type: "put",
+								url: path
+							}).done((data) => {
+								alert("Ate that burger!");
+								console.log(data);
+								var burgers = $('#eaten-burgers');
+								//burgers.empty();
+								//burgers.addClass("table table-bordered table-hover table-responsive")
+								var newHead=$('<thead>')
+								newHead.html(
+										$('<tr>').append(
+											$('<th>').text('ID'),
+											$('<th>').text('Burger Name'),
+											$('<th>').text('Who Submitted?'),
+											$('<th>').text('When Was It Made?'),
+											$('<th>').text('When Was It Eaten?')
+										))
+										burgers.html(newHead);
+								//for (var i = 0; i < data.isEaten.length; i++) {
+									var newBody=$('<tbody>')
+								data.isEaten.forEach(child => {
+									newBody.append
+										$('<tbody>').append(
+										$('<tr>').append(
+											$('<td>').text(child.id),
+											$('<td>').text(child.burger_name),
+											$('<td>').text(child.user_created),
+											$('<td>').text(child.created_at),
+											$('<td>').text(child.updated_at)
+										))
+								})
+								burgers.append(newBody);
+							})
+						}
+					});
+				});
+
+
+			</script>
+		</div>
+	</div>

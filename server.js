@@ -28,25 +28,20 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(flash());
 
-
-
-
-//
 //
 //             // Routes
 app.get("/", (req, res, next) => {
     // connection.query("SELECT * FROM ready WHERE ?", { is_eaten: 0 }, (error, notEaten) => {
     //   if (error) throw error;
-    db.burger.findAll({ where: { is_eaten: false } }).then(results => {
-        console.log(results)
+    db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
+        db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
+            return res.render("burger", {
+                title: "Boogers, Not Burgers v2.0",
+                notEaten: notEaten,
+                isEaten: isEaten
+            });
+        })
 
-
-        //    '' cnnection.query("SELECT * FROM ready WHERE ?", { is_eaten: 1 }, (error, isEaten) => {
-        //         if (error) throw error;
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            notEaten: results
-        });
 
     });
 
@@ -59,7 +54,7 @@ app.post("/", (req, res, next) => {
     //var newBurger = req.body;
     // connection.query("INSERT INTO ready SET ?", { burger_name: newBurger.burger_name, user_created: newBurger.user_created, is_eaten: 0 }, (err, result) => {
     db.burger.create(req.body, {}).done(data => {
-        res.redirect('/');
+        return res.redirect('/');
     })
 
     //     if (err) throw err
@@ -69,17 +64,42 @@ app.post("/", (req, res, next) => {
 
 });
 app.put("/eatburger/:id", (req, res, next) => {
-    // console.log(req.params.id)
-    // var eatBurger = req.params.id;
-    // connection.query("UPDATE ready SET is_eaten = ? WHERE id =" + eatBurger, { is_eaten: 1 }, (error, results) => {
-    //     console.log(results);
-    //     if (error) throw error;
-    //     return res.redirect("/");
+    var eatBurger = req.params.id;
+    console.log(eatBurger);
+    db.burger.update({ is_eaten: true }, {
+            where: { id: eatBurger }
+        }).done(results => {
+            console.log(results)
+            db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
+                db.burger.findAll({ where: { is_eaten: true } }).then(notEaten => {
+                    return res.send({ notEaten: notEaten, isEaten: isEaten });
+
+                })
+
+            })
+
+        })
+        // connection.query("UPDATE ready SET is_eaten = ? WHERE id =" + eatBurger, { is_eaten: 1 }, (error, results) => {
+        //     console.log(results);
+        //     if (error) throw error;{}
+        //     return res.redirect("/");
 
     // });
 });
+app.get("/:id", (req, res, next) => {
+    var burger = req.params.id
+    db.burger.findOne({ where: { id: burger } }).then(stuff => {
+
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            notEaten: results,
+            message: error
+        })
+    })
+});
 // Initiate the listener.
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ force: false })
     .then(function() {
         console.log("Starting the server on port " + port)
         app.listen(port);

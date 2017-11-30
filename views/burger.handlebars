@@ -18,7 +18,7 @@ h1,h2,h3,h4,p {
 			</thead>
 			<tbody>
 		{{#each notEaten}}
-			<tr><td>{{id}}</td><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{date_created}}</td><td><a href="#" class="eatIt" data-value="{{id}}"><i class="fa fa-heart" aria-hidden="true" data-value="{{id}}"></i></a></td></tr> 
+			<tr><td>{{id}}</td><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{created_at}}</td><td><a href="#" class="eatIt" data-value="{{id}}"><i class="fa fa-heart" aria-hidden="true" data-value="{{id}}"></i></a></td></tr> 
 		{{/each}}
 		</tbody>
 		</table>
@@ -38,11 +38,11 @@ h1,h2,h3,h4,p {
 			<h3>Eaten Burgers</h3>
 			<table class="table table-bordered table-hover table-responsive">
 			<thead>
-			<tr><th>Burger Name</th><th>Who Submitted?</th><th>When?</th></tr>
+			<tr><th>ID</th><th>Burger Name</th><th>Who Submitted?</th><th>When Was It Made?</th><th>When Was it Eaten?</th></tr>
 			</thead>
 			<tbody>
 			{{#each isEaten}}
-			<tr><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{date_created}}</td><td>{{date_eaten}}</td></tr> 
+			<tr><td>{{id}}</td><td>{{burger_name}}</td><td>{{user_created}}</td><td>{{created_at}}</td><td>{{updated_at}}</td></tr> 
 	     	 	{{/each}}
 			</tbody>
 		</table>

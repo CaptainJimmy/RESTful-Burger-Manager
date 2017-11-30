@@ -1,20 +1,7 @@
-var mysql = require('mysql');
-var DBPASSWORD = process.env.DBPASSWORD;
-var connection = mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: DBPASSWORD,
-            database: 'burgers_db'
-});
-console.log(DBPASSWORD);
-connection.connect( (err) => {
-if (err) throw err;
-console.log(connection.threadId);
-
- connection.query("SELECT * FROM ready",(error,results) => {
-if (error) throw error;
-console.log(results);
-connection.end();
-});
-});
-
+for (var i = 1; i <= 100; i++) {
+    var three = false;
+    var five = false;
+    if (i % 3 == 0) three = true
+    if (i % 5 == 0) five = true
+    console.log(three ? five ? "fizzbuzz" : "fizz" : five ? "buzz" : i)
+}

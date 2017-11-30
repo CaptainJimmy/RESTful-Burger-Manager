@@ -1,21 +1,32 @@
 {
-  "name": "burger",
-  "version": "1.0.0",
-  "description": "A simple node/express/mysql app to create burgers and eat them,",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CaptainJimmy/burger.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/CaptainJimmy/burger/issues"
-  },
-  "homepage": "https://github.com/CaptainJimmy/burger#readme"
+    "name": "burger2",
+    "version": "1.0.0",
+    "description": "A node/express/mysql/sequelize/handlebars app to create burgers and eat them,",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CaptainJimmy/burger2.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/CaptainJimmy/burger2/issues"
+    },
+    "homepage": "https://github.com/CaptainJimmy/burger2#readme",
+    "dependencies": {
+        "connect-flash": "^0.1.1",
+        "dot-env": "0.0.1",
+        "express": "^4.16.2",
+        "express-handlebars": "^3.0.0",
+        "flash-messages": "0.0.4",
+        "morgan": "^1.9.0",
+        "mysql2": "^1.5.1",
+        "sequelize": "^4.23.2",
+        "serve-favicon": "^2.4.5"
+    }
 }

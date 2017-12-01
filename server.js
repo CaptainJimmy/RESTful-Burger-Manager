@@ -26,6 +26,9 @@ app.use(bodyParser.urlencoded({
 }));
 // init connect-flash for messages
 app.use(express.static('public'))
+    //serve the favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+
 app.use(flash());
 
 //
@@ -79,6 +82,31 @@ app.put("/eatburger/:id", (req, res, next) => {
 
     })
 });
+app.get("/eaten", (req, res, next) => {
+    console.log("eaten")
+    db.burger.findAll({ where: { is_eaten: true } }).then(results => {
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            isEaten: results,
+            message: "error"
+        })
+    })
+});
+app.get("/noteaten", (req, res, next) => {
+    console.log("noteaten")
+
+    db.burger.findAll({ where: { is_eaten: false } }).then(results => {
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            notEaten: results,
+            message: "error"
+        })
+    });
+});
 app.get("/:id", (req, res, next) => {
     var burger = req.params.id
     db.burger.findOne({ where: { id: burger } }).then((stuff) => {
@@ -92,39 +120,21 @@ app.get("/:id", (req, res, next) => {
     })
 });
 
-app.delete("/:id", (req, res, next) => {
+app.delete("/delete/:id", (req, res, next) => {
     var deleteBurger = req.params.id
-    if (deleteBurger) {
+    console.log("delete", deleteBurger)
 
-    } else {
-        console.log("Error in delete!")
-        return res.send("Error!!")
-    }
-})
-app.get("/eaten", (req, res, next) => {
-    db.burger.findAll({ where: { is_eaten: true } }).then(results => {
-        console.log(JSON.stringify(results))
-        return res.json(results)
-    }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            isEaten: results,
-            message: "error"
-        })
-    })
-});
-app.get("/noteaten", (req, res, next) => {
-    db.burger.findAll({ where: { is_eaten: false } }).then(results => {
-        console.log(JSON.stringify(results))
-        return res.json(results)
+    db.burger.destroy({ where: { id: deleteBurger } }).then((stuff) => {
+        return res.json(stuff)
     }).catch(error => {
         return res.render("burger", {
             title: "Boogers, Not Burgers v2.0",
             notEaten: results,
-            message: "error"
+            message: error
         })
-    });
-});
+    })
+})
+
 
 // Initiate the listener.
 db.sequelize.sync({ force: false })

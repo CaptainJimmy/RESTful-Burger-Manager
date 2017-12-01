@@ -1,15 +1,5 @@
 <style>
-	body {
-		background-color: orangered;
-	}
 
-	h1,
-	h2,
-	h3,
-	h4,
-	p {
-		font-color: white;
-	}
 </style>
 <div class="container">
 	<div class="jumbotron">
@@ -23,7 +13,6 @@
 				<table id="not-eaten-burgers" class="table table-bordered table-hover table-responsive">
 					<thead>
 						<tr>
-							<th>ID</th>
 							<th>Burger Name</th>
 							<th>Who Submitted?</th>
 							<th>When?</th>
@@ -34,7 +23,6 @@
 						{{#each notEaten}}
 						<form>
 							<tr>
-								<td>{{id}}</td>
 								<td>{{burger_name}}</td>
 								<td>{{user_created}}</td>
 								<td>{{created_at}}</td>
@@ -52,7 +40,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="col-xs-4" id="center">
+		<div class="col-xs-3" id="center">
 			<form method="POST" role="form" action="/">
 				<label for="username">What is your name?</label>
 				<input type="text" id="username" default="Bob" name="user_created" class="form-control">
@@ -61,13 +49,12 @@
 				<button class="btn btn-lg" id="add-burger-button" type="submit">Submit</button>
 			</form>
 		</div>
-		<div class="col-xs-4" id="right">
+		<div class="col-xs-5" id="right">
 			<div class="panel">
 				<h3>Eaten Burgers</h3>
 				<table id="eaten-burgers" class="table table-bordered table-hover table-responsive">
 					<thead>
 						<tr>
-							<th>ID</th>
 							<th>Burger Name</th>
 							<th>Who Submitted?</th>
 							<th>When Was It Made?</th>
@@ -79,14 +66,15 @@
 						{{#each isEaten}}
 						<form>
 						<tr>
-							<td>{{id}}</td>
 							<td>{{burger_name}}</td>
 							<td>{{user_created}}</td>
 							<td>{{created_at}}</td>
 							<td>{{updated_at}}</td>
 							<td>
 								<input type="hidden" name="id" value="{{id}}" data-value="{{id}}">
-								HERE IS THE LATEST STOP ZLZLZLZLZ
+								<button class="btn btn-default eatIt" data-value="{{id}}" type="submit">
+										<i class="fa fa-window-close" aria-hidden="true" data-value="{{id}}"></i>
+								</button>
 								</td>
 						</tr>
 						</form>
@@ -97,78 +85,4 @@
 
 		</div>
 	</div>
-	<script>
-		$(document).ready(function () {
-
-			function burgerReDraw(data,method) {
-				var burgers = $('#eaten-burgers > tbody');
-				burgers.empty();
-				data.isEaten.forEach(child => {
-					var newRow = $('<tr>')
-					newRow.append(
-						$('<td>').text(child.id),
-						$('<td>').text(child.burger_name),
-						$('<td>').text(child.user_created),
-						$('<td>').text(child.created_at),
-						$('<td>').text(child.updated_at),
-						$('<button>').addClass("btn btn-default deleteBurger").append(
-								$('<i>').addClass("fa fa-window-close").attr({"aria-hidden": "true", "data-value": child.id}))
-					)
-
-					burgers.append(newRow);
-				})
-				var notEatenBurger = $('#not-eaten-burgers > tbody');
-				data.notEaten.forEach(child => {
-					var newNotEatenRow = $('<tr>');
-					newNotEatenRow.append(
-						$('<td>').text(child.id),
-						$('<td>').text(child.burger_name),
-						$('<td>').text(child.user_created),
-						$('<td>').text(child.created_at)
-					)
-					notEatenBurger.html(newNotEatenRow);
-				
-					switch (method) {
-						case "deleted":
-							$('#messages').addClass("active").removeClass("hidden").text("Burger Successfully Deleted")
-							break;
-						case "eat":
-							$('#messages').addClass("active").removeClass("hidden").text("Burger Successfully Eaten")
-					}
-				})
-			}
-
-			$(".eatIt").on("click", function (event) {
-				event.preventDefault();
-				var eatTheBurgerID = $(this).attr('data-value');
-				console.log(eatTheBurgerID);
-				if (eatTheBurgerID) {
-					var path = '/eatburger/' + eatTheBurgerID;
-					$.ajax({
-						type: "put",
-						url: path
-					}).done((data) => {
-						alert("Ate that burger!");
-						burgerReDraw(data,"eat");
-					})
-				}
-			});
-			$(document).on("click",".deleteBurger", function(event) {
-				event.preventDefault();
-				var deleteBurgerID = $(this).attr('data-value');
-				var derpypath = '/' + deleteBurgerID
-				$.ajax({
-					type: "delete",
-					url: derpypath
-				}).done( (data)=>{
-					burgerReDraw(data,"deleted")
-					})
-					//.catch((err) => {
-					//$('#messages').text(err)
-				//})
-
-			});
-
-
-		});
-	</script>
+<script src="/js/app.js"  type="text/javascript"></script>

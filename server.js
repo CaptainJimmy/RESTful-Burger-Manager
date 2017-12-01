@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 // init connect-flash for messages
+app.use(express.static('public'))
 app.use(flash());
 
 //
@@ -43,10 +44,7 @@ app.get("/", (req, res, next) => {
 
 
     });
-
-
 });
-
 
 app.post("/", (req, res, next) => {
     db.burger.create(req.body, {}).then(data => {
@@ -102,9 +100,31 @@ app.delete("/:id", (req, res, next) => {
         console.log("Error in delete!")
         return res.send("Error!!")
     }
-
 })
-
+app.get("/eaten", (req, res, next) => {
+    db.burger.findAll({ where: { is_eaten: true } }).then(results => {
+        console.log(JSON.stringify(results))
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            isEaten: results,
+            message: "error"
+        })
+    })
+});
+app.get("/noteaten", (req, res, next) => {
+    db.burger.findAll({ where: { is_eaten: false } }).then(results => {
+        console.log(JSON.stringify(results))
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            notEaten: results,
+            message: "error"
+        })
+    });
+});
 
 // Initiate the listener.
 db.sequelize.sync({ force: false })

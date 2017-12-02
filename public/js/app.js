@@ -93,6 +93,7 @@ $(document).ready(function() {
                 burgerReDraw("deleted")
             })
             .catch((err) => {
+		    console.log(err)
                 $('#messages').text(err)
             })
 
@@ -110,7 +111,7 @@ $(document).ready(function() {
             }
         }).then((data) => {
             console.log(data)
-                //burgerReDraw("submit")
+                burgerReDraw("submit")
         })
 
 

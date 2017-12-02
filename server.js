@@ -51,17 +51,7 @@ app.post("/add", (req, res, next) => {
     console.log(req.body)
     console.log("added!!!")
     db.burger.create(req.body, {}).then(data => {
-        db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
-            db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
-                res.send({ notEaten: notEaten, isEaten: isEaten });
-                //return res.render("burger", {
-                //  title: "Boogers, Not Burgers v2.0",
-                // notEaten: notEaten,
-                //  isEaten: isEaten,
-                //  message: "Post Successful"
-                //})
-            })
-        })
+                res.send(data);
     })
 });
 
@@ -120,29 +110,34 @@ app.get("/noteaten", (req, res, next) => {
         })
     });
 });
-//app.get("/:id", (req, res, next) => {
-//    var burger = req.params.id
-//    db.burger.findOne({ where: { id: burger } }).then((stuff) => {
-//        return res.json(stuff)
-//    }).catch(error => {
-//        return res.render("burger", {
-//            title: "Boogers, Not Burgers v2.0",
-//            notEaten: results,
-//           message: error
-//        })
-//    })
-//});
 
-app.delete("/:id", (req, res, next) => {
-    var deleteBurger = req.params.id
-    if (deleteBurger) {
+app.delete("/delete/:id", (req, res, next) => {
+	    var deleteBurger = req.params.id
+	    console.log("delete", deleteBurger)
 
-    } else {
-        console.log("Error in delete!")
-        return res.send("Error!!")
-    }
-
+	    db.burger.destroy({ where: { id: deleteBurger } }).then((stuff) => {
+		            return res.json(stuff)
+		        }).catch(error => {
+				        return res.render("burger", {
+						            title: "Boogers, Not Burgers v2.0",
+						            notEaten: results,
+						            message: error
+						        })
+				    })
 })
+
+app.get("/:id", (req, res, next) => {
+    var burger = req.params.id
+    db.burger.findOne({ where: { id: burger } }).then((stuff) => {
+        return res.json(stuff)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            notEaten: results,
+           message: error
+        })
+    })
+});
 
 
 // Initiate the listener.

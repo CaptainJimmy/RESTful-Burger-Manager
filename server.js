@@ -48,6 +48,7 @@ app.get("/", (req, res, next) => {
 
 
 app.post("/", (req, res, next) => {
+    console.log(req.body)
     db.burger.create(req.body, {}).then(data => {
         db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
             db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {

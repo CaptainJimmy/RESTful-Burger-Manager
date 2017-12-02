@@ -1,0 +1,128 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a demo API"
+  version: "1.0.0"
+  title: "Simple Burger Menu API"
+  contact:
+    email: "james.reinknecht@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "jamesreinknecht.com"
+basePath: "/burgers"
+tags:
+- name: "admins"
+  description: "Secured Admin-only calls"
+- name: "developers"
+  description: "Operations available to regular developers"
+schemes:
+- "https"
+paths:
+  /:
+    get:
+      summary: "Renders the home page with handlebars"
+      description: "pulls all the burgers from the DB and displays them"
+      operationId: "rootGET"
+      produces:
+      - "html"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+    post:
+      summary: "Creates a new burger from the form"
+      description: "re-renders the home page with new data after a successful post"
+      operationId: "rootPOST"
+      produces:
+      - "html"
+      - "json rendered through handlebars"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /all:
+    get:
+      summary: "Returns a list of all burgers."
+      operationId: "allGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /eaten:
+    get:
+      summary: "Returns a list of all burgers that have been 'eaten'"
+      operationId: "eatenGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /noteaten:
+    get:
+      summary: "Returns a list of all burgers that have been not been 'eaten'"
+      operationId: "noteatenGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /eatburger/{id}:
+    put:
+      summary: "Updates burgers to is_eaten to true in the database"
+      description: "Page reloads automagically with jquery from html page,"
+      operationId: "eatburgerIdPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Numeric ID of the burger to update."
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /{id}:
+    get:
+      summary: "gets a particular burgerid"
+      operationId: "idGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Numeric ID of the burger to get."
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+  /delete/{id}:
+    delete:
+      summary: "deletes a particular burgerid"
+      operationId: "deleteIdDELETE"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Numeric ID of the burger to get."
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+definitions: {}

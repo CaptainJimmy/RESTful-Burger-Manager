@@ -4,7 +4,7 @@ $(document).ready(function() {
         console.log("REDRAW!!!")
         $.ajax({
             type: "GET",
-            url: "/eaten"
+            url: "/burger/eaten"
         }).then(data => {
             console.log("eaten1")
             var burgers = $('#eaten-burgers > tbody');
@@ -27,7 +27,7 @@ $(document).ready(function() {
         }).then(function() {
             $.ajax({
                 type: "GET",
-                url: "/noteaten"
+                url: "/burger/noteaten"
             }).then(data => {
                 console.log("noteaten1")
                 var notEatenBurger = $('#not-eaten-burgers > tbody');
@@ -67,7 +67,7 @@ $(document).ready(function() {
         var eatTheBurgerID = $(this).attr('data-value');
         console.log(eatTheBurgerID);
         if (eatTheBurgerID) {
-            var path = '/eatburger/' + eatTheBurgerID;
+            var path = '/burger/eatburger/' + eatTheBurgerID;
             $.ajax({
                 type: "put",
                 url: path
@@ -82,7 +82,7 @@ $(document).ready(function() {
         console.log("DERPY")
         var deleteBurgerID = $(this).attr('data-value');
         console.log(deleteBurgerID)
-        var derpypath = '/delete/' + deleteBurgerID
+        var derpypath = '/burger/delete/' + deleteBurgerID
         $.ajax({
                 type: "DELETE",
                 url: derpypath

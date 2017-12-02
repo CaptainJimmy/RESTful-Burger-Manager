@@ -107,18 +107,18 @@ app.get("/noteaten", (req, res, next) => {
         })
     });
 });
-app.get("/:id", (req, res, next) => {
-    var burger = req.params.id
-    db.burger.findOne({ where: { id: burger } }).then((stuff) => {
-        return res.json(stuff)
-    }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            notEaten: results,
-            message: error
-        })
-    })
-});
+//app.get("/:id", (req, res, next) => {
+//    var burger = req.params.id
+  //  db.burger.findOne({ where: { id: burger } }).then((stuff) => {
+    //    return res.json(stuff)
+ //   }).catch(error => {
+   //     return res.render("burger", {
+     //       title: "Boogers, Not Burgers v2.0",
+       //     notEaten: results,
+         //   message: error
+//        })
+  //  })
+//});
 
 app.delete("/delete/:id", (req, res, next) => {
     var deleteBurger = req.params.id

@@ -97,8 +97,10 @@ $(document).ready(function() {
             })
 
     });
-    $('#burger-add-button').on("click", function(event) {
+    $(document).on("click",".addBurger", function(event) {
         event.preventDefault();
+	    console.log("HERE")
+	    console.log($('#username').val().trim(),$('#add-burger').val().trim())
         $.ajax({
             url: "/burger",
             type: "POST",
@@ -106,7 +108,8 @@ $(document).ready(function() {
                 "user_created": $('#username').val().trim(),
                 "burger_name": $('#add-burger').val().trim()
             }
-        }).then(function() {
+        }).then((data)=> {
+		console.log(data)
             burgerReDraw("submit")
         })
 

@@ -97,20 +97,20 @@ $(document).ready(function() {
             })
 
     });
-    $(document).on("click",".addBurger", function(event) {
+    $(document).on("click", ".addBurger", function(event) {
         event.preventDefault();
-	    console.log("HERE")
-	    console.log($('#username').val().trim(),$('#add-burger').val().trim())
+        console.log("HERE")
+        console.log($('#username').val().trim(), $('#add-burger').val().trim())
         $.ajax({
-            url: "/burger",
+            url: "/burger/add",
             type: "POST",
             data: {
                 "user_created": $('#username').val().trim(),
                 "burger_name": $('#add-burger').val().trim()
             }
-        }).then((data)=> {
-		console.log(data)
-            burgerReDraw("submit")
+        }).then((data) => {
+            console.log(data)
+                //burgerReDraw("submit")
         })
 
 

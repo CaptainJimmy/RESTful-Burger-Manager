@@ -25,14 +25,14 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 // serve static files
- app.use(express.static('public'))
-//     //serve the favicon
- app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-//     // init connect-flash for messages
+app.use(express.static('public'))
+    //    serve the favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+    //     init connect-flash for messages
 app.use(flash());
 
-//
-//             // Routes
+
+// Routes
 app.get("/", (req, res, next) => {
     db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
         db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
@@ -42,25 +42,23 @@ app.get("/", (req, res, next) => {
                 isEaten: isEaten
             });
         })
-
-
     });
-
-
 });
 
 
 app.post("/add", (req, res, next) => {
+
     console.log(req.body)
+    console.log("added!!!")
     db.burger.create(req.body, {}).then(data => {
         db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
             db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
-		res.send({ notEaten: notEaten, isEaten: isEaten});	    
-		    //return res.render("burger", {
-                  //  title: "Boogers, Not Burgers v2.0",
-                   // notEaten: notEaten,
-                  //  isEaten: isEaten,
-                  //  message: "Post Successful"
+                res.send({ notEaten: notEaten, isEaten: isEaten });
+                //return res.render("burger", {
+                //  title: "Boogers, Not Burgers v2.0",
+                // notEaten: notEaten,
+                //  isEaten: isEaten,
+                //  message: "Post Successful"
                 //})
             })
         })
@@ -85,6 +83,43 @@ app.put("/eatburger/:id", (req, res, next) => {
 
     })
 });
+app.get("/all", (req, res, next) => {
+    console.log("all")
+    db.burger.findAll({}).then(results => {
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            isEaten: results,
+            message: "error"
+        })
+    })
+});
+app.get("/eaten", (req, res, next) => {
+    console.log("eaten")
+    db.burger.findAll({ where: { is_eaten: true } }).then(results => {
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            isEaten: results,
+            message: "error"
+        })
+    })
+});
+app.get("/noteaten", (req, res, next) => {
+    console.log("noteaten")
+
+    db.burger.findAll({ where: { is_eaten: false } }).then(results => {
+        return res.json(results)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            notEaten: results,
+            message: "error"
+        })
+    });
+});
 //app.get("/:id", (req, res, next) => {
 //    var burger = req.params.id
 //    db.burger.findOne({ where: { id: burger } }).then((stuff) => {
@@ -93,7 +128,7 @@ app.put("/eatburger/:id", (req, res, next) => {
 //        return res.render("burger", {
 //            title: "Boogers, Not Burgers v2.0",
 //            notEaten: results,
- //           message: error
+//           message: error
 //        })
 //    })
 //});

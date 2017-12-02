@@ -59,6 +59,9 @@ $(document).ready(function() {
                 break;
             case "eat":
                 $('#messages').addClass("active").removeClass("hidden").text("Burger Successfully Eaten")
+                break;
+            case "submit":
+                $('#messages').addClass("active").removeClass("hidden").text("Burger Successfully Submitted")
         }
     }
 
@@ -94,6 +97,19 @@ $(document).ready(function() {
             })
 
     });
+    $('#burger-add-button').on("click", function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/burger",
+            type: "POST",
+            data: {
+                "user_created": $('#username').val().trim(),
+                "burger_name": $('#add-burger').val().trim()
+            }
+        }).then(function() {
+            burgerReDraw("submit")
+        })
 
 
+    });
 });

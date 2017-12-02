@@ -25,17 +25,12 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 // init connect-flash for messages
-app.use(express.static('public'))
-    //serve the favicon
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-
 app.use(flash());
 
 //
 //             // Routes
 app.get("/", (req, res, next) => {
-    // connection.query("SELECT * FROM ready WHERE ?", { is_eaten: 0 }, (error, notEaten) => {
-    //   if (error) throw error;
+
     db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
         db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
             return res.render("burger", {
@@ -47,7 +42,10 @@ app.get("/", (req, res, next) => {
 
 
     });
+
+
 });
+
 
 app.post("/", (req, res, next) => {
     db.burger.create(req.body, {}).then(data => {
@@ -82,49 +80,9 @@ app.put("/eatburger/:id", (req, res, next) => {
 
     })
 });
-app.get("/eaten", (req, res, next) => {
-    console.log("eaten")
-    db.burger.findAll({ where: { is_eaten: true } }).then(results => {
-        return res.json(results)
-    }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            isEaten: results,
-            message: "error"
-        })
-    })
-});
-app.get("/noteaten", (req, res, next) => {
-    console.log("noteaten")
-
-    db.burger.findAll({ where: { is_eaten: false } }).then(results => {
-        return res.json(results)
-    }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            notEaten: results,
-            message: "error"
-        })
-    });
-});
-//app.get("/:id", (req, res, next) => {
-//    var burger = req.params.id
-  //  db.burger.findOne({ where: { id: burger } }).then((stuff) => {
-    //    return res.json(stuff)
- //   }).catch(error => {
-   //     return res.render("burger", {
-     //       title: "Boogers, Not Burgers v2.0",
-       //     notEaten: results,
-         //   message: error
-//        })
-  //  })
-//});
-
-app.delete("/delete/:id", (req, res, next) => {
-    var deleteBurger = req.params.id
-    console.log("delete", deleteBurger)
-
-    db.burger.destroy({ where: { id: deleteBurger } }).then((stuff) => {
+app.get("/:id", (req, res, next) => {
+    var burger = req.params.id
+    db.burger.findOne({ where: { id: burger } }).then((stuff) => {
         return res.json(stuff)
     }).catch(error => {
         return res.render("burger", {
@@ -133,6 +91,17 @@ app.delete("/delete/:id", (req, res, next) => {
             message: error
         })
     })
+});
+
+app.delete("/:id", (req, res, next) => {
+    var deleteBurger = req.params.id
+    if (deleteBurger) {
+
+    } else {
+        console.log("Error in delete!")
+        return res.send("Error!!")
+    }
+
 })
 
 

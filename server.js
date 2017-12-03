@@ -48,6 +48,11 @@ app.get("/", (req, res, next) => {
 
     });
 });
+app.get("/api", (req, res, next) => {
+	    db.burger.findAll({}).then(results => {
+		            return res.json(results)
+		        });
+});
 
 app.get("/api/all", (req, res, next) => {
     db.burger.findAll({}).then(results => {
@@ -59,8 +64,7 @@ app.post("/api/add", (req, res, next) => {
     db.burger.create(req.body, {}).then(data => {
         db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
             db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
-                return res.render("burger", {
-                    title: "Boogers, Not Burgers v2.0",
+                return res.json({
                     notEaten: notEaten,
                     isEaten: isEaten,
                     message: "Post Successful"
@@ -143,7 +147,7 @@ app.delete("/api/delete/:id", (req, res, next) => {
 
 
 // Initiate the listener.
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ force: false })
     .then(function() {
         console.log("Starting the server on port " + port)
         app.listen(port);

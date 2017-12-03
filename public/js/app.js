@@ -90,7 +90,7 @@ $(document).ready(function() {
     $(document).on("click", ".deleteBurger", function(event) {
         event.preventDefault();
         var deleteBurgerID = $(this).attr('data-value');
-        var derpypath = '/bur ger/api/delete/' + deleteBurgerID
+        var derpypath = '/burger/api/delete/' + deleteBurgerID
         $.ajax({
                 type: "DELETE",
                 url: derpypath
@@ -106,13 +106,16 @@ $(document).ready(function() {
     // add a burger
     $(document).on("click", ".addBurger", function(event) {
         event.preventDefault();
-        console.log($('#username').val().trim(), $('#add-burger').val().trim())
+	    //console.log($('#username').val().trim(), $('#add-burger').val().trim())
+	    var userCreated=$('#username').val().trim();
+	    var burgerName=$('#add-burger').val().trim();
+        $(this).closest('form').find("input[type=text], textarea").val("");
         $.ajax({
                 url: "/burger/api/add",
                 type: "POST",
                 data: {
-                    "user_created": $('#username').val().trim(),
-                    "burger_name": $('#add-burger').val().trim()
+                    "user_created": userCreated,
+                    "burger_name": burgerName
                 }
             }).then((data) => {
                 burgerReDraw("submit")

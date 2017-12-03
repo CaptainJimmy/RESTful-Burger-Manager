@@ -1,4 +1,4 @@
-//v1.01
+//v1.05
 // Dependencies
 var express = require("express");
 var exphbs = require("express-handlebars");
@@ -80,10 +80,6 @@ app.put("/api/eatburger/:id", (req, res, next) => {
         where: { id: eatBurger }
     }).done(results => {
         return res.send(results)
-    }).catch(err => {
-        if (err) {
-            return res.send(err)
-        }
     })
 });
 
@@ -91,8 +87,6 @@ app.put("/api/eatburger/:id", (req, res, next) => {
 app.get("/api/eaten", (req, res, next) => {
     db.burger.findAll({ where: { is_eaten: true } }).then(results => {
         return res.json(results)
-    }).catch(error => {
-        return res.json(error)
     })
 });
 //fetch all that are  not 'eaten' (is_eaten: false || is_eaten: 0)

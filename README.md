@@ -1,4 +1,5 @@
-# burger2
+# RESTful-Burger-Manager
+
 ## A node/express/sequelize/mysql/handlebars with RESTful API app to create burgers and eat them,
 
 This is an app to practice RESTful APIs, with a simple front end. 

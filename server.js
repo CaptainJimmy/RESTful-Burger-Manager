@@ -1,3 +1,4 @@
+//v1.01
 // Dependencies
 var express = require("express");
 var exphbs = require("express-handlebars");
@@ -24,16 +25,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-// serve static files
+// init connect-flash for messages
 app.use(express.static('public'))
-    //    serve the favicon
+    //serve the favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-    //     init connect-flash for messages
+
 app.use(flash());
 
-
-// Routes
+//
+//             // Routes
 app.get("/", (req, res, next) => {
+
     db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
         db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
             return res.render("burger", {
@@ -42,21 +44,34 @@ app.get("/", (req, res, next) => {
                 isEaten: isEaten
             });
         })
+
+
     });
 });
 
+app.get("/api/all", (req, res, next) => {
+    db.burger.findAll({}).then(results => {
+        return res.json(results)
+    });
+});
 
-app.post("/add", (req, res, next) => {
-
-    console.log(req.body)
-    console.log("added!!!")
+app.post("/api", (req, res, next) => {
     db.burger.create(req.body, {}).then(data => {
-                res.send(data);
+        db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
+            db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
+                return res.render("burger", {
+                    title: "Boogers, Not Burgers v2.0",
+                    notEaten: notEaten,
+                    isEaten: isEaten,
+                    message: "Post Successful"
+                })
+            })
+        })
     })
 });
 
 
-app.put("/eatburger/:id", (req, res, next) => {
+app.put("/api/eatburger/:id", (req, res, next) => {
     var eatBurger = req.params.id;
     console.log(eatBurger);
     db.burger.update({ is_eaten: true }, {
@@ -73,19 +88,7 @@ app.put("/eatburger/:id", (req, res, next) => {
 
     })
 });
-app.get("/all", (req, res, next) => {
-    console.log("all")
-    db.burger.findAll({}).then(results => {
-        return res.json(results)
-    }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            isEaten: results,
-            message: "error"
-        })
-    })
-});
-app.get("/eaten", (req, res, next) => {
+app.get("/api/eaten", (req, res, next) => {
     console.log("eaten")
     db.burger.findAll({ where: { is_eaten: true } }).then(results => {
         return res.json(results)
@@ -97,7 +100,7 @@ app.get("/eaten", (req, res, next) => {
         })
     })
 });
-app.get("/noteaten", (req, res, next) => {
+app.get("/api/noteaten", (req, res, next) => {
     console.log("noteaten")
 
     db.burger.findAll({ where: { is_eaten: false } }).then(results => {
@@ -110,23 +113,7 @@ app.get("/noteaten", (req, res, next) => {
         })
     });
 });
-
-app.delete("/delete/:id", (req, res, next) => {
-	    var deleteBurger = req.params.id
-	    console.log("delete", deleteBurger)
-
-	    db.burger.destroy({ where: { id: deleteBurger } }).then((stuff) => {
-		            return res.json(stuff)
-		        }).catch(error => {
-				        return res.render("burger", {
-						            title: "Boogers, Not Burgers v2.0",
-						            notEaten: results,
-						            message: error
-						        })
-				    })
-})
-
-app.get("/:id", (req, res, next) => {
+app.get("/api/:id", (req, res, next) => {
     var burger = req.params.id
     db.burger.findOne({ where: { id: burger } }).then((stuff) => {
         return res.json(stuff)
@@ -134,10 +121,25 @@ app.get("/:id", (req, res, next) => {
         return res.render("burger", {
             title: "Boogers, Not Burgers v2.0",
             notEaten: results,
-           message: error
+            message: error
         })
     })
 });
+
+app.delete("/api/delete/:id", (req, res, next) => {
+    var deleteBurger = req.params.id
+    console.log("delete", deleteBurger)
+
+    db.burger.destroy({ where: { id: deleteBurger } }).then((stuff) => {
+        return res.json(stuff)
+    }).catch(error => {
+        return res.render("burger", {
+            title: "Boogers, Not Burgers v2.0",
+            notEaten: results,
+            message: error
+        })
+    })
+})
 
 
 // Initiate the listener.

@@ -4,7 +4,7 @@ $(document).ready(function() {
         console.log("REDRAW!!!")
         $.ajax({
             type: "GET",
-            url: "/burger/eaten"
+            url: "/burger/api/eaten"
         }).then(data => {
             console.log("eaten1")
             var burgers = $('#eaten-burgers > tbody');
@@ -17,7 +17,7 @@ $(document).ready(function() {
                     $('<td>').text(child.created_at),
                     $('<td>').text(child.updated_at),
                     $('<button>').addClass("btn btn-default deleteBurger").attr({ "data-value": child.id }).append(
-                        $('<i>').addClass("fa fa-window-close").attr({ "aria-hidden": "true" })
+                        $('<i>').addClass("fa fa-window-close deleteBurger").attr({ "aria-hidden": "true", "data-value": child.id })
                     )
                 )
                 burgers.append(newRow);
@@ -27,7 +27,7 @@ $(document).ready(function() {
         }).then(function() {
             $.ajax({
                 type: "GET",
-                url: "/burger/noteaten"
+                url: "/burger/api/noteaten"
             }).then(data => {
                 console.log("noteaten1")
                 var notEatenBurger = $('#not-eaten-burgers > tbody');
@@ -43,8 +43,8 @@ $(document).ready(function() {
                             "data-value": child.id,
                             type: "submit"
                         }).append(
-                            $('<i>').addClass("fa fa-heart")
-                            .attr({ "aria-hidden": "true" })
+                            $('<i>').addClass("fa fa-heart eatIt")
+                            .attr({ "aria-hidden": "true", "data-value": child.id })
                         )
                     )
                     console.log("foo");
@@ -70,7 +70,7 @@ $(document).ready(function() {
         var eatTheBurgerID = $(this).attr('data-value');
         console.log(eatTheBurgerID);
         if (eatTheBurgerID) {
-            var path = '/burger/eatburger/' + eatTheBurgerID;
+            var path = '/burger/api/eatburger/' + eatTheBurgerID;
             $.ajax({
                 type: "put",
                 url: path
@@ -85,7 +85,7 @@ $(document).ready(function() {
         console.log("DERPY")
         var deleteBurgerID = $(this).attr('data-value');
         console.log(deleteBurgerID)
-        var derpypath = '/burger/delete/' + deleteBurgerID
+        var derpypath = '/burger/apir/delete/' + deleteBurgerID
         $.ajax({
                 type: "DELETE",
                 url: derpypath
@@ -93,7 +93,7 @@ $(document).ready(function() {
                 burgerReDraw("deleted")
             })
             .catch((err) => {
-		    console.log(err)
+                console.log(err)
                 $('#messages').text(err)
             })
 
@@ -111,7 +111,7 @@ $(document).ready(function() {
             }
         }).then((data) => {
             console.log(data)
-                burgerReDraw("submit")
+            burgerReDraw("submit")
         })
 
 

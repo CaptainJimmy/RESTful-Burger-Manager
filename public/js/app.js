@@ -90,7 +90,7 @@ $(document).ready(function() {
     $(document).on("click", ".deleteBurger", function(event) {
         event.preventDefault();
         var deleteBurgerID = $(this).attr('data-value');
-        var derpypath = '/burger/api/delete/' + deleteBurgerID
+        var derpypath = '/bur ger/api/delete/' + deleteBurgerID
         $.ajax({
                 type: "DELETE",
                 url: derpypath
@@ -106,7 +106,6 @@ $(document).ready(function() {
     // add a burger
     $(document).on("click", ".addBurger", function(event) {
         event.preventDefault();
-        console.log("HERE")
         console.log($('#username').val().trim(), $('#add-burger').val().trim())
         $.ajax({
                 url: "/burger/api/add",

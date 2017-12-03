@@ -85,7 +85,7 @@ $(document).ready(function() {
         console.log("DERPY")
         var deleteBurgerID = $(this).attr('data-value');
         console.log(deleteBurgerID)
-        var derpypath = '/burger/apir/delete/' + deleteBurgerID
+        var derpypath = '/burger/api/delete/' + deleteBurgerID
         $.ajax({
                 type: "DELETE",
                 url: derpypath
@@ -103,7 +103,7 @@ $(document).ready(function() {
         console.log("HERE")
         console.log($('#username').val().trim(), $('#add-burger').val().trim())
         $.ajax({
-            url: "/burger/add",
+            url: "/burger/api/add",
             type: "POST",
             data: {
                 "user_created": $('#username').val().trim(),

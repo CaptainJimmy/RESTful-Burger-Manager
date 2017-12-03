@@ -21,21 +21,22 @@ app.engine("handlebars", exphbs({
 }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "handlebars");
+// middlewear
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-// init connect-flash for messages
+// static files
 app.use(express.static('public'))
     //serve the favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+    // init connect-flash for messages NOT IN USE YET
 
 app.use(flash());
-
-//
-//             // Routes
+// Routes
+// main route to render the page
 app.get("/", (req, res, next) => {
-
+    //pull the burger lists from mysql, render the outputs into handlebars
     db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
         db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
             return res.render("burger", {
@@ -48,65 +49,54 @@ app.get("/", (req, res, next) => {
 
     });
 });
+//API ROUTES BELOW
+//get all
 app.get("/api", (req, res, next) => {
-	    db.burger.findAll({}).then(results => {
-		            return res.json(results)
-		        });
+    db.burger.findAll({}).then(results => {
+        return res.json(results)
+    });
 });
-
+//another get all
 app.get("/api/all", (req, res, next) => {
     db.burger.findAll({}).then(results => {
         return res.json(results)
     });
 });
-
+// add / create route, return the new objects
 app.post("/api/add", (req, res, next) => {
     db.burger.create(req.body, {}).then(data => {
-        db.burger.findAll({ where: { is_eaten: false } }).then(notEaten => {
-            db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
-                return res.json({
-                    notEaten: notEaten,
-                    isEaten: isEaten,
-                    message: "Post Successful"
-                })
-            })
-        })
+        return res.json(data)
+    }).catch(err => {
+        if (err) {
+            return res.json(err)
+        }
     })
 });
 
-
+// update / put route
 app.put("/api/eatburger/:id", (req, res, next) => {
     var eatBurger = req.params.id;
-    console.log(eatBurger);
     db.burger.update({ is_eaten: true }, {
         where: { id: eatBurger }
     }).done(results => {
-        console.log(results)
-        db.burger.findAll({ where: { is_eaten: true } }).then(isEaten => {
-            db.burger.findAll({ where: { is_eaten: true } }).then(notEaten => {
-                return res.send({ notEaten: notEaten, isEaten: isEaten });
-
-            })
-
-        })
-
+        return res.send(results)
+    }).catch(err => {
+        if (err) {
+            return res.send(err)
+        }
     })
 });
+
+//fetch all that have been 'eaten' (is_eaten: true || is_eaten: 1)
 app.get("/api/eaten", (req, res, next) => {
-    console.log("eaten")
     db.burger.findAll({ where: { is_eaten: true } }).then(results => {
         return res.json(results)
     }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            isEaten: results,
-            message: "error"
-        })
+        return res.json(error)
     })
 });
+//fetch all that are  not 'eaten' (is_eaten: false || is_eaten: 0)
 app.get("/api/noteaten", (req, res, next) => {
-    console.log("noteaten")
-
     db.burger.findAll({ where: { is_eaten: false } }).then(results => {
         return res.json(results)
     }).catch(error => {
@@ -117,35 +107,27 @@ app.get("/api/noteaten", (req, res, next) => {
         })
     });
 });
+// get a particular id
 app.get("/api/:id", (req, res, next) => {
     var burger = req.params.id
     db.burger.findOne({ where: { id: burger } }).then((stuff) => {
         return res.json(stuff)
     }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            notEaten: results,
-            message: error
-        })
+        return res.json(error)
     })
 });
 
+// delete route
 app.delete("/api/delete/:id", (req, res, next) => {
     var deleteBurger = req.params.id
-    console.log("delete", deleteBurger)
-
     db.burger.destroy({ where: { id: deleteBurger } }).then((stuff) => {
         return res.json(stuff)
     }).catch(error => {
-        return res.render("burger", {
-            title: "Boogers, Not Burgers v2.0",
-            notEaten: results,
-            message: error
-        })
+        return res.json(error)
     })
-})
+});
 
-
+// Sync the database ORM
 // Initiate the listener.
 db.sequelize.sync({ force: false })
     .then(function() {
